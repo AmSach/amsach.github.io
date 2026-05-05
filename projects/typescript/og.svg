@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="60" y1="40" x2="1140" y2="590" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#07111F"/>
+      <stop offset="0.48" stop-color="#0A1628"/>
+      <stop offset="1" stop-color="#050B14"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(210 140) rotate(12) scale(250 250)">
+      <stop stop-color="#78F0C1" stop-opacity="0.30"/>
+      <stop offset="1" stop-color="#78F0C1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(980 140) rotate(12) scale(260 260)">
+      <stop stop-color="#9FA8FF" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#9FA8FF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur" x="0" y="0" width="1200" height="630" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="30"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="630" rx="40" fill="url(#bg)"/>
+  <circle cx="240" cy="160" r="180" fill="url(#glowA)" filter="url(#blur)"/>
+  <circle cx="980" cy="170" r="190" fill="url(#glowB)" filter="url(#blur)"/>
+  <rect x="62" y="58" width="1076" height="514" rx="32" fill="rgba(255,255,255,0.03)" stroke="rgba(177,208,255,0.16)"/>
+  <path d="M84 510 C 216 442, 300 448, 408 396 C 506 346, 586 262, 650 250 C 724 236, 806 288, 900 242 C 979 204, 1038 146, 1104 122" stroke="rgba(120,240,193,0.35)" stroke-width="3" fill="none"/>
+  <text x="72" y="112" class="kind">MIRROR INDEX</text>
+  <text x="72" y="170" class="title">TypeScript</text>
+  <text x="72" y="360" class="subtitle">TypeScript is a superset of JavaScript</text><text x="72" y="392" class="subtitle">that compiles to clean JavaScript output.</text>
+  <text x="72" y="524" class="footer">Aman Sachan • GitHub Pages research hub • public papers and projects</text>
+  <circle cx="1034" cy="456" r="66" fill="rgba(120,240,193,0.10)" stroke="rgba(120,240,193,0.24)"/>
+  <path d="M1010 461 L1033 432 L1058 461 L1033 486 Z" fill="rgba(233,242,255,0.95)"/>
+  <style>
+    .kind { font: 600 20px Inter, Arial, sans-serif; letter-spacing: 0.34em; fill: #A2B5D1; }
+    .title { font: 800 54px Inter, Arial, sans-serif; letter-spacing: -0.05em; fill: #F3F7FF; }
+    .subtitle { font: 400 26px Inter, Arial, sans-serif; fill: rgba(233,242,255,0.74); }
+    .footer { font: 500 20px Inter, Arial, sans-serif; fill: rgba(233,242,255,0.64); }
+  </style>
+</svg>

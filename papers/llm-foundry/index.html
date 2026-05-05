@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Working paper draft for LLM Foundry: a modular framework for model orchestration, memory, compression, tools, traces, and evaluation." />
+    <meta name="theme-color" content="#07111f" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LLM Foundry — working paper draft" />
+    <meta property="og:description" content="A long-form paper draft for LLM Foundry, with formal definitions, derivations, algorithms, and evaluation design." />
+    <meta property="og:image" content="og.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="LLM Foundry — working paper draft" />
+    <meta name="twitter:description" content="A long-form paper draft for LLM Foundry, with formal definitions, derivations, algorithms, and evaluation design." />
+    <meta name="twitter:image" content="og.svg" />
+    <title>LLM Foundry — working paper draft</title>
+    <link rel="icon" type="image/png" href="../../assets/icon.png" />
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body data-page-kind="paper">
+    <div class="shell detail-shell">
+      <header class="topbar">
+        <a class="brand" href="../../index.html">
+          <img src="../../assets/pegasus.svg" alt="Pegasus logo" />
+          <div class="brand-text">
+            <strong>Aman Sachan</strong>
+            <span>papers • projects • research index</span>
+          </div>
+        </a>
+        <nav class="nav">
+          <a href="../../index.html">Home</a>
+          <a data-active="true" href="../../papers/">Papers</a>
+          <a href="../../projects/">Projects</a>
+          <a href="https://github.com/AmSach/llm-foundry" target="_blank" rel="noreferrer">GitHub repo</a>
+        </nav>
+      </header>
+
+      <main class="detail-main">
+        <section class="detail-hero panel">
+          <div class="detail-hero-copy">
+            <span class="eyebrow">Paper draft</span>
+            <h1>LLM Foundry: a modular framework for orchestration, memory, compression, tools, and evaluation</h1>
+            <p>
+              This is a long-form draft for the repository. It formalises the architecture in the repo README,
+              usage guide, and technical paper notes: the model is only one piece; the useful system is the stack
+              around it.
+            </p>
+            <div class="hero-actions">
+              <a class="btn primary" href="https://github.com/AmSach/llm-foundry" target="_blank" rel="noreferrer">Open repo</a>
+              <a class="btn ghost" href="https://github.com/AmSach/llm-foundry/blob/main/docs/index.html" target="_blank" rel="noreferrer">Docs demo</a>
+              <a class="btn ghost" href="../../projects/llm-foundry/">Project page</a>
+              <a class="btn ghost" href="../../index.html">Home</a>
+            </div>
+          </div>
+          <aside class="hero-aside detail-aside">
+            <div class="stat-grid">
+              <div class="stat"><strong>Draft</strong><span>Status</span></div>
+              <div class="stat"><strong>17</strong><span>Core sections</span></div>
+              <div class="stat"><strong>5</strong><span>Algorithm blocks</span></div>
+              <div class="stat"><strong>Public</strong><span>Pages-ready surface</span></div>
+            </div>
+            <div class="feature-stack">
+              <div class="feature"><span class="dot"></span><div><strong>Model-agnostic control plane</strong><span>Adapters, memory, reasoning, and harnesses wrap any backend.</span></div></div>
+              <div class="feature"><span class="dot"></span><div><strong>Trace-first design</strong><span>Agent runs become structured data, not just terminal output.</span></div></div>
+              <div class="feature"><span class="dot"></span><div><strong>Multi-endpoint routing</strong><span>Failover and round-robin bundles are treated as a first-class layer.</span></div></div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="detail-grid">
+          <article class="section panel detail-panel">
+            <div class="section-head"><div><h2>Abstract</h2><p>What the paper claims without the marketing sludge.</p></div></div>
+            <div class="prose">
+              <p>
+                LLM Foundry is a modular framework for language-model work that treats the base model as only one
+                component of a larger system. Real use needs more than a prompt box: it needs tokenisation, memory,
+                compression, tool execution, trace capture, evaluation, and back-end abstraction. This paper
+                formalises that stack as a control plane around any model source.
+              </p>
+              <p>
+                The core idea is brutally simple. If the model is the worker, then the surrounding machinery is the
+                workshop: the translator, the notebook, the editor, the audit log, the test bench, and the router.
+                Once those pieces are formalised, a model can be swapped without rebuilding the whole system.
+              </p>
+              <p>
+                The draft below gives a clean engineering view, a mathematical view, and an implementation view. It
+                also stays honest about what is and is not actually in the repo today.
+              </p>
+            </div>
+          </article>
+
+          <aside class="section panel detail-panel">
+            <div class="section-head"><div><h2>At a glance</h2><p>What a reviewer needs before reading the weeds.</p></div></div>
+            <div class="mini-list">
+              <div class="mini-item"><div><strong>Primary problem</strong><span>Make model usage stateful, testable, and operationally sane.</span></div></div>
+              <div class="mini-item"><div><strong>Control layers</strong><span>Adapter, tokenizer, memory, reasoning, agent, trace, eval, routing.</span></div></div>
+              <div class="mini-item"><div><strong>Exactness goal</strong><span>Structured workflows without losing the raw model interface.</span></div></div>
+              <div class="mini-item"><div><strong>Public demo</strong><span>GitHub Pages docs page plus this draft page.</span></div></div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>1. Problem statement</h2><p>What goes wrong when the model is treated like a standalone product.</p></div></div>
+          <div class="prose columns">
+            <div>
+              <h3>The model is not the system</h3>
+              <p>
+                A language model by itself is a stateless function. It takes text, emits text, and forgets the rest.
+                That is fine for toy chat, and mediocre for real work. Real tasks need memory, constraints,
+                observability, and control over what happens after generation.
+              </p>
+            </div>
+            <div>
+              <h3>Operational requirements</h3>
+              <p>
+                A useful system must support repeatable prompts, contextual compression, retrieval from prior work,
+                structured tool use, and consistent testing. Otherwise every long session becomes a pile of manual
+                prompting and crossed fingers.
+              </p>
+            </div>
+            <div>
+              <h3>Design target</h3>
+              <p>
+                The goal is a model-agnostic control plane. If the backend changes, the user should keep the same
+                memory, trace, and evaluation contract. That is the point of a framework instead of a one-off script.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>2. Notation and system model</h2><p>Formal definitions so the rest does not become mush.</p></div></div>
+          <div class="prose">
+            <p>Let a task be represented by a prompt <code>x</code>, a context bundle <code>c</code>, and a model backend <code>M</code>.</p>
+            <p>We write the effective model interface as:</p>
+            <pre><code>y = M(x, c; θ)</code></pre>
+            <p>where <code>θ</code> denotes backend-specific parameters or API state. The surrounding system transforms raw user intent into a structured context bundle:</p>
+            <pre><code>c = (c_sys, c_user, c_mem, c_tools, c_trace)</code></pre>
+            <p>
+              with system instructions, user prompt, retrieved memory, tool affordances, and trace history. The job
+              of LLM Foundry is to construct <code>c</code> in a way that improves utility without forcing the user to
+              think about every layer manually.
+            </p>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>3. Architecture overview</h2><p>The stack is boring on purpose. Boring is what survives.</p></div></div>
+          <div class="prose columns">
+            <div>
+              <h3>Adapter layer</h3>
+              <p>
+                The adapter isolates backend shape. Whether the model is local, OpenAI-compatible, Hugging Face,
+                or a multi-endpoint bundle, the rest of the stack should only need a <code>generate(prompt)</code>
+                contract and a small metadata envelope.
+              </p>
+            </div>
+            <div>
+              <h3>Tokenizer layer</h3>
+              <p>
+                Tokenisation converts text into the discrete units the backend understands. The repo documents byte,
+                character, and Hugging Face tokenisation paths. The point is compatibility, not theological purity.
+              </p>
+            </div>
+            <div>
+              <h3>Memory and compression layer</h3>
+              <p>
+                Long sessions are expensive. The system compresses prior text into notes, keeps high-value facts, and
+                retrieves them later. The memory vault acts like a searchable notebook instead of a black hole.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>4. Formal memory objective</h2><p>What the compression layer is trying to optimise.</p></div></div>
+          <div class="prose">
+            <p>Let <code>S</code> be a summary candidate and <code>T</code> be the original transcript or working context.</p>
+            <pre><code>U(S; T) = α · Rel(S, T) - β · Redundancy(S) + γ · Retrieval(S) - δ · Cost(S)</code></pre>
+            <p>
+              where <code>Rel</code> measures relevance to the task, <code>Redundancy</code> penalises repeated content,
+              <code>Retrieval</code> rewards future usefulness, and <code>Cost</code> accounts for token count and later
+              rehydration overhead. The coefficients are not sacred; they are a tuning problem.
+            </p>
+            <p>
+              A simple extractive compressor can be written as a ranking problem over sentences or spans. If
+              <code>σ_i</code> is a sentence score, then we keep the top-scoring spans subject to a budget constraint:
+            </p>
+            <pre><code>maximize   Σ_i σ_i z_i
+subject to Σ_i ℓ_i z_i ≤ B,   z_i ∈ {0, 1}</code></pre>
+            <p>
+              where <code>ℓ_i</code> is span length and <code>B</code> is the token budget. The relaxation <code>z_i ∈ [0,1]</code>
+              gives a continuous form that is easier to optimise and easier to explain to a human.
+            </p>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>5. Reasoning overlays</h2><p>Extra passes that reduce the chance of saying something dumb with confidence.</p></div></div>
+          <div class="prose columns">
+            <div>
+              <h3>Reflection</h3>
+              <p>
+                A draft answer is generated, then critiqued, then revised. In practice this is a cheap way to catch
+                obvious contradictions before they become the final answer.
+              </p>
+            </div>
+            <div>
+              <h3>Consensus</h3>
+              <p>
+                If multiple samples are available, the system can vote or score them. If each independent sample is
+                correct with probability <code>p &gt; 1/2</code>, then majority vote reduces error probability by a
+                binomial tail:
+              </p>
+              <pre><code>P(correct) = Σ_{k=⌈n/2⌉}^{n} C(n, k) p^k (1-p)^{n-k}</code></pre>
+            </div>
+            <div>
+              <h3>Counterfactual check</h3>
+              <p>
+                Ask whether the answer still holds if one assumption flips. That is a tiny bit of paranoia, which is
+                often exactly what a long-running agent needs.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>6. Agent runtime and trace model</h2><p>Why the system can learn from itself instead of pretending every run is isolated.</p></div></div>
+          <div class="prose">
+            <p>Let an agent trajectory be <code>τ = (o_1, a_1, o_2, a_2, …, o_n, a_n)</code>, where observations and actions alternate.</p>
+            <p>The runtime consumes a task, selects tools, executes calls, and records a trace:</p>
+            <pre><code>trace = {
+  task,
+  steps: [
+    { observation, action, tool_result },
+    ...
+  ],
+  final_answer
+}</code></pre>
+            <p>
+              That trace can be exported into supervised examples. A simple export objective is to maximise the
+              likelihood of correct tool sequences while preserving enough metadata to reproduce the run later.
+            </p>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>7. Multi-endpoint orchestration</h2><p>One endpoint is nice. Two is insurance. More is strategy.</p></div></div>
+          <div class="prose">
+            <p>
+              The repo documents multi-endpoint configuration for failover or round-robin routing. If each endpoint
+              <code>i</code> has latency <code>ℓ_i</code>, cost <code>c_i</code>, and reliability <code>r_i</code>, then a routing
+              score can be written as:</p>
+            <pre><code>score(i) = w_ℓ · ℓ_i + w_c · c_i - w_r · r_i</code></pre>
+            <p>
+              The chosen backend is then <code>argmin_i score(i)</code>, optionally subject to hard constraints such as
+              provider availability, token limits, or policy filters. This is not fancy, but it is robust, which is the
+              only reason it matters.
+            </p>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>8. Evaluation harnesses</h2><p>No one should trust a system without a test bench.</p></div></div>
+          <div class="prose columns">
+            <div>
+              <h3>Reasoning</h3>
+              <p>Measure consistency, self-checking, and explanation quality. The interesting metric is not style; it is whether the answer survives scrutiny.</p>
+            </div>
+            <div>
+              <h3>Tool use</h3>
+              <p>Measure whether the model can select a tool, call it correctly, and use the result rather than hallucinating a shortcut.</p>
+            </div>
+            <div>
+              <h3>Memory</h3>
+              <p>Measure whether compressed notes can be retrieved and re-injected without losing the salient facts.</p>
+            </div>
+          </div>
+          <div class="prose">
+            <p>A practical metric suite can include exact-match, pass@k, tool success rate, retrieval hit rate, and end-to-end task completion.</p>
+            <pre><code>task_score = λ1·exact_match + λ2·pass@k + λ3·tool_success + λ4·retrieval_hit_rate</code></pre>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>9. Algorithms</h2><p>Pseudocode, because vibes are not a specification.</p></div></div>
+          <div class="prose">
+            <h3>Algorithm 1 — context build</h3>
+            <pre><code>Input: user prompt x, memory store V, backend M
+1. retrieve top-k notes from V using x
+2. build system prompt c_sys
+3. compose c = (c_sys, x, retrieved notes, tool schema, trace summary)
+4. call backend M(x, c)
+5. record output and metadata</code></pre>
+            <h3>Algorithm 2 — trace export</h3>
+            <pre><code>Input: run trace τ
+1. normalise tool names and arguments
+2. split trajectory into observation/action pairs
+3. write structured record to disk
+4. attach task, final answer, and outcome flags</code></pre>
+            <h3>Algorithm 3 — routing</h3>
+            <pre><code>Input: endpoint set E, task t
+1. score each endpoint by latency, cost, and reliability
+2. filter unavailable endpoints
+3. choose argmin score
+4. if the call fails, retry on the next best endpoint</code></pre>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>10. Derivations</h2><p>Enough math to be real, not enough to be a lie.</p></div></div>
+          <div class="prose columns">
+            <div>
+              <h3>Context budget</h3>
+              <p>
+                If a session has raw length <code>L_raw</code> and compressed length <code>L_cmp</code>, then the effective
+                budget gain is <code>ΔL = L_raw - L_cmp</code>. The point of memory compression is to maximise <code>ΔL</code>
+                while keeping the downstream answer quality stable.
+              </p>
+            </div>
+            <div>
+              <h3>Consensus error</h3>
+              <p>
+                For independent samples with correctness <code>p</code>, majority voting becomes increasingly reliable as
+                <code>n</code> grows, provided <code>p &gt; 1/2</code>. The formula above quantifies the improvement.
+              </p>
+            </div>
+            <div>
+              <h3>Routing tradeoff</h3>
+              <p>
+                If latency, cost, and reliability are combined linearly, then weights encode policy. A budget-sensitive
+                deployment sets <code>w_c</code> higher; a latency-sensitive deployment sets <code>w_ℓ</code> higher; a
+                mission-critical deployment sets <code>w_r</code> highest. That is the whole game.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>11. Training from traces</h2><p>How the system can produce its own training data without self-delusion.</p></div></div>
+          <div class="prose">
+            <p>
+              A trace can be turned into supervised data by pairing the observed state with the chosen action. If a
+              policy <code>π</code> produced the trace, then standard sequence learning minimises:
+            </p>
+            <pre><code>L_sft = -Σ_t log π(a_t | o_tt}, c_t)</code></pre>
+            <p>
+              Additional penalties can be added for invalid tool use, incoherent reasoning, or failed retrieval. The
+              general objective is:
+            </p>
+            <pre><code>L = L_sft + λ_trace L_trace + λ_mem L_mem + λ_safe L_safe</code></pre>
+            <p>
+              The point is not to worship one loss function. It is to make the right behaviour easy to measure and
+              harder to fake.
+            </p>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>12. What the repo already gives you</h2><p>From the documentation, not from fantasy.</p></div></div>
+          <div class="prose columns">
+            <div>
+              <h3>Backend abstraction</h3>
+              <p>Adapters for local, OpenAI-compatible, Hugging Face, and multi-endpoint paths.</p>
+            </div>
+            <div>
+              <h3>Memory utilities</h3>
+              <p>Compression plus a markdown-based note vault for durable recall.</p>
+            </div>
+            <div>
+              <h3>Trace export and harnesses</h3>
+              <p>Structured traces and evaluation scripts for reasoning, coding, tool use, and memory.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>13. Limitations</h2><p>The annoying part that keeps the paper honest.</p></div></div>
+          <div class="prose">
+            <ul class="detail-list">
+              <li>This is a control-plane framework, not a frontier base model.</li>
+              <li>Compression and memory quality depend on the backend and the task.</li>
+              <li>Multi-endpoint routing is only as good as the provider metadata you feed it.</li>
+              <li>Trace export is useful only if the traces are actually valid.</li>
+              <li>Evaluation must be repeated on real workloads, not just demo prompts.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>14. Proposed experiments</h2><p>What a serious final version would measure.</p></div></div>
+          <div class="prose columns">
+            <div>
+              <h3>Memory compression ablation</h3>
+              <p>Compare no compression, extractive compression, and retrieval-augmented compression across long tasks.</p>
+            </div>
+            <div>
+              <h3>Routing ablation</h3>
+              <p>Measure latency, failover success, and cost across single-endpoint and multi-endpoint deployments.</p>
+            </div>
+            <div>
+              <h3>Trace training ablation</h3>
+              <p>Check whether trace-derived fine-tuning improves tool choice, answer quality, or both.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>15. Demo commands</h2><p>The shortest path from paper to doing something useful.</p></div></div>
+          <div class="prose">
+            <pre><code>python -m llm_foundry demo --provider qwen --model Qwen/Qwen2.5-0.5B-Instruct --prompt "Hello"</code></pre>
+            <pre><code>python -m llm_foundry proof --provider qwen --model Qwen/Qwen2.5-0.5B-Instruct</code></pre>
+            <pre><code>python -m llm_foundry super-suit --api-endpoints-file endpoints.json --api-strategy failover --task "Do the whole workflow"</code></pre>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>16. Conclusion</h2><p>What the reader should remember after the noise clears.</p></div></div>
+          <div class="prose">
+            <p>
+              LLM Foundry is a control plane around an LLM, not a replacement for one. Its value comes from wrapping
+              the model with memory, compression, tools, traces, evaluation, and routing so the whole thing behaves
+              like a system instead of a toy.
+            </p>
+            <p>
+              The paper draft is intentionally practical. It says what the repo already does, formalises the moving
+              parts, and leaves enough mathematical structure for a proper final manuscript. That is better than bluff.
+            </p>
+          </div>
+        </section>
+
+        <section class="section panel detail-panel">
+          <div class="section-head"><div><h2>References and links</h2><p>Where to go next if you want the source material.</p></div></div>
+          <div class="mini-list">
+            <div class="mini-item"><div><strong>Repo README</strong><span>https://github.com/AmSach/llm-foundry/blob/main/README.md</span></div></div>
+            <div class="mini-item"><div><strong>Usage guide</strong><span>https://github.com/AmSach/llm-foundry/blob/main/USAGE.md</span></div></div>
+            <div class="mini-item"><div><strong>Docs demo</strong><span>https://github.com/AmSach/llm-foundry/blob/main/docs/index.html</span></div></div>
+            <div class="mini-item"><div><strong>Paper source</strong><span>https://github.com/AmSach/llm-foundry/blob/main/paper.md</span></div></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

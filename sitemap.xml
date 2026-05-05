@@ -4,43 +4,119 @@
   <url><loc>/papers/</loc></url>
   <url><loc>/projects/</loc></url>
   <url><loc>/mirrors.html</loc></url>
+  <url><loc>/papers/middleout-lattice-paper/</loc></url>
   <url><loc>/papers/kvquant-paper-ultradeep-v3/</loc></url>
   <url><loc>/papers/kvquant-paper-ultradeep-v2/</loc></url>
   <url><loc>/papers/kvquant-paper-ultradeep/</loc></url>
   <url><loc>/papers/kvquant-paper/</loc></url>
-  <url><loc>/projects/voxelnav/</loc></url>
-  <url><loc>/projects/kvquant/</loc></url>
-  <url><loc>/projects/sentience/</loc></url>
+  <url><loc>/projects/middleout-lattice/</loc></url>
   <url><loc>/projects/bitforge/</loc></url>
+  <url><loc>/projects/btc-router/</loc></url>
+  <url><loc>/projects/compute-pool/</loc></url>
+  <url><loc>/projects/datapop/</loc></url>
   <url><loc>/projects/ghostpilot/</loc></url>
-  <url><loc>/projects/llm-foundry/</loc></url>
+  <url><loc>/projects/kvquant/</loc></url>
+  <url><loc>/projects/meshmind/</loc></url>
   <url><loc>/projects/neuroshell/</loc></url>
   <url><loc>/projects/nexus/</loc></url>
-  <url><loc>/projects/signalhop/</loc></url>
+  <url><loc>/projects/sentience/</loc></url>
+  <url><loc>/projects/sentience-final/</loc></url>
+  <url><loc>/projects/sentinel/</loc></url>
+  <url><loc>/projects/voxelnav/</loc></url>
   <url><loc>/projects/whisperbridge/</loc></url>
-  <url><loc>/projects/btc-router/</loc></url>
-  <url><loc>/projects/meshmind/</loc></url>
-  <url><loc>/projects/datapop/</loc></url>
-  <url><loc>/projects/hive-fixes/</loc></url>
-  <url><loc>/projects/lingua/</loc></url>
   <url><loc>/projects/agada/</loc></url>
   <url><loc>/projects/agadahealth/</loc></url>
+  <url><loc>/projects/amansachanresearch/</loc></url>
+  <url><loc>/projects/amsach-github-io/</loc></url>
   <url><loc>/projects/claw/</loc></url>
   <url><loc>/projects/claw-local/</loc></url>
-  <url><loc>/projects/compute-pool/</loc></url>
   <url><loc>/projects/compute-pool-backend/</loc></url>
   <url><loc>/projects/compute-pool-frontend/</loc></url>
   <url><loc>/projects/compute-pool-node/</loc></url>
   <url><loc>/projects/defspace/</loc></url>
   <url><loc>/projects/entropic-pegasus/</loc></url>
+  <url><loc>/projects/hive-fixes/</loc></url>
+  <url><loc>/projects/lingua/</loc></url>
+  <url><loc>/projects/llm-foundry/</loc></url>
   <url><loc>/projects/nexus-intel/</loc></url>
   <url><loc>/projects/nexus-server/</loc></url>
   <url><loc>/projects/sarva/</loc></url>
   <url><loc>/projects/sarva-backend/</loc></url>
   <url><loc>/projects/sarva-frontend/</loc></url>
   <url><loc>/projects/sarva-node/</loc></url>
-  <url><loc>/projects/sentience-final/</loc></url>
   <url><loc>/projects/sentience-v2/</loc></url>
-  <url><loc>/projects/sentinel/</loc></url>
+  <url><loc>/projects/signalhop/</loc></url>
   <url><loc>/projects/tomcat/</loc></url>
+  <url><loc>/projects/adk-python/</loc></url>
+  <url><loc>/projects/ansible/</loc></url>
+  <url><loc>/projects/astrbot-plugin-mnemosyne/</loc></url>
+  <url><loc>/projects/atmos/</loc></url>
+  <url><loc>/projects/bot/</loc></url>
+  <url><loc>/projects/bugdom/</loc></url>
+  <url><loc>/projects/camelot/</loc></url>
+  <url><loc>/projects/claudemap/</loc></url>
+  <url><loc>/projects/cpython/</loc></url>
+  <url><loc>/projects/dead-domain-discovery/</loc></url>
+  <url><loc>/projects/deeptutor/</loc></url>
+  <url><loc>/projects/deno/</loc></url>
+  <url><loc>/projects/deployments/</loc></url>
+  <url><loc>/projects/dism-multi-language/</loc></url>
+  <url><loc>/projects/django/</loc></url>
+  <url><loc>/projects/django-tailwind-cli/</loc></url>
+  <url><loc>/projects/epson-printer-snmp/</loc></url>
+  <url><loc>/projects/exceptnotifier/</loc></url>
+  <url><loc>/projects/frame/</loc></url>
+  <url><loc>/projects/gidgethub/</loc></url>
+  <url><loc>/projects/go/</loc></url>
+  <url><loc>/projects/helioslauncher/</loc></url>
+  <url><loc>/projects/hermes-agent/</loc></url>
+  <url><loc>/projects/hive/</loc></url>
+  <url><loc>/projects/icom-lan/</loc></url>
+  <url><loc>/projects/ics-calendar/</loc></url>
+  <url><loc>/projects/kubernetes/</loc></url>
+  <url><loc>/projects/lightweight-charts-python/</loc></url>
+  <url><loc>/projects/moneyprinter-enhanced/</loc></url>
+  <url><loc>/projects/monty/</loc></url>
+  <url><loc>/projects/musescore/</loc></url>
+  <url><loc>/projects/nautobot-app-ssot/</loc></url>
+  <url><loc>/projects/next-js/</loc></url>
+  <url><loc>/projects/node/</loc></url>
+  <url><loc>/projects/node-todo/</loc></url>
+  <url><loc>/projects/nodejs-goof/</loc></url>
+  <url><loc>/projects/openssl/</loc></url>
+  <url><loc>/projects/pandas/</loc></url>
+  <url><loc>/projects/php-src/</loc></url>
+  <url><loc>/projects/piemme/</loc></url>
+  <url><loc>/projects/pokemon-showdown-dex/</loc></url>
+  <url><loc>/projects/powersync/</loc></url>
+  <url><loc>/projects/project-based-learning/</loc></url>
+  <url><loc>/projects/pydantic-ai/</loc></url>
+  <url><loc>/projects/pyratelimiter/</loc></url>
+  <url><loc>/projects/python/</loc></url>
+  <url><loc>/projects/python-100-days/</loc></url>
+  <url><loc>/projects/python-genai/</loc></url>
+  <url><loc>/projects/python-printer-escpos/</loc></url>
+  <url><loc>/projects/pyvesc/</loc></url>
+  <url><loc>/projects/rails/</loc></url>
+  <url><loc>/projects/react-shadcn-components/</loc></url>
+  <url><loc>/projects/redis/</loc></url>
+  <url><loc>/projects/roslyn/</loc></url>
+  <url><loc>/projects/rsnapshot/</loc></url>
+  <url><loc>/projects/rust/</loc></url>
+  <url><loc>/projects/semgrep/</loc></url>
+  <url><loc>/projects/shadowsocks-libev/</loc></url>
+  <url><loc>/projects/shap/</loc></url>
+  <url><loc>/projects/sktime/</loc></url>
+  <url><loc>/projects/stackprinter/</loc></url>
+  <url><loc>/projects/stakeout-agent/</loc></url>
+  <url><loc>/projects/t01-burnmap/</loc></url>
+  <url><loc>/projects/tensorflow/</loc></url>
+  <url><loc>/projects/todoctor/</loc></url>
+  <url><loc>/projects/todoman/</loc></url>
+  <url><loc>/projects/tools/</loc></url>
+  <url><loc>/projects/typescript/</loc></url>
+  <url><loc>/projects/vibesentry/</loc></url>
+  <url><loc>/projects/vscode/</loc></url>
+  <url><loc>/projects/weather/</loc></url>
+  <url><loc>/projects/yt-dlp/</loc></url>
 </urlset>

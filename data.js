@@ -277,7 +277,7 @@ window.SITE_DATA = {
     {
       "name": "amsach.github.io",
       "description": "Aman Sachan's personal research index",
-      "url": "https://amansachan.com",
+      "url": "https://amsach.github.io",
       "repoUrl": "https://github.com/AmSach/amsach.github.io",
       "language": "HTML",
       "stars": 0,
