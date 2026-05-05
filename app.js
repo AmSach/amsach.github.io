@@ -2,7 +2,7 @@ const data = window.SITE_DATA;
 const state = {
   view: 'all',
   query: '',
-  showMirrors: true,
+  showMirrors: false,
 };
 
 const els = {
@@ -100,7 +100,7 @@ function matchCard(card) {
     state.view === 'papers' ? kind === 'paper' :
     state.view === 'projects' ? kind === 'project' :
     state.view === 'mirrors' ? kind === 'mirror' : true;
-  const mirrorMatch = state.showMirrors || kind !== 'mirror';
+  const mirrorMatch = state.view === 'mirrors' ? true : (state.showMirrors || kind !== 'mirror');
   const queryMatch = !search || text.includes(search);
   return viewMatch && mirrorMatch && queryMatch;
 }
@@ -120,7 +120,7 @@ function updateVisibility() {
     section.style.display = shouldShow ? '' : 'none';
   });
 
-  els.noResults.style.display = document.querySelectorAll('.card[data-kind]').length && [...document.querySelectorAll('.card[data-kind]')].some(matchCard)
+  els.noResults.style.display = [...document.querySelectorAll('.card[data-kind]')].some(matchCard)
     ? 'none'
     : '';
 }
