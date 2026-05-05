@@ -1,0 +1,201 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Aman Sachan's personal research index: papers, projects, mirrors, and public work in one place." />
+    <meta name="theme-color" content="#07111f" />
+    <title>Aman Sachan — Papers, Projects & Research Index</title>
+    <link rel="icon" type="image/png" href="assets/icon.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <a class="brand" href="#top">
+          <img src="assets/pegasus.svg" alt="Pegasus logo" />
+          <div class="brand-text">
+            <strong>Aman Sachan</strong>
+            <span>papers • projects • public work</span>
+          </div>
+        </a>
+        <nav class="nav">
+          <a href="#papers">Papers</a>
+          <a href="#projects">Projects</a>
+          <a href="#mirrors">Mirrors</a>
+          <a href="https://github.com/AmSach" target="_blank" rel="noreferrer">GitHub</a>
+        </nav>
+      </header>
+
+      <main id="top">
+        <section class="hero">
+          <div class="hero-copy">
+            <span class="eyebrow">Personal research website</span>
+            <h1>One home for every paper, project, and prototype.</h1>
+            <p>
+              A high-signal, searchable index for Aman Sachan's public research. Use it like a personal front page:
+              jump into papers, browse active projects, and keep the whole body of work discoverable from one place.
+            </p>
+            <div class="hero-actions">
+              <a class="btn primary" href="#index">Explore the index</a>
+              <a class="btn ghost" href="#papers">Read the papers</a>
+            </div>
+          </div>
+
+          <aside class="hero-aside">
+            <div class="stat-grid">
+              <div class="stat">
+                <strong id="papersCount">—</strong>
+                <span>manuscripts and paper versions</span>
+              </div>
+              <div class="stat">
+                <strong id="projectsCount">—</strong>
+                <span>original GitHub projects</span>
+              </div>
+              <div class="stat">
+                <strong id="mirrorsCount">—</strong>
+                <span>forks and mirrors</span>
+              </div>
+              <div class="stat">
+                <strong id="totalShown">—</strong>
+                <span>searchable items right now</span>
+              </div>
+            </div>
+            <div class="feature-stack">
+              <div class="feature">
+                <span class="dot"></span>
+                <div>
+                  <strong>Research-first layout</strong>
+                  <span>Papers are upfront, not buried under code links.</span>
+                </div>
+              </div>
+              <div class="feature">
+                <span class="dot"></span>
+                <div>
+                  <strong>Searchable index</strong>
+                  <span>Find any paper or repo instantly with live filtering.</span>
+                </div>
+              </div>
+              <div class="feature">
+                <span class="dot"></span>
+                <div>
+                  <strong>Publication-friendly</strong>
+                  <span>Built to pair cleanly with GitHub Pages, arXiv, and Scholar indexing.</span>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="section" id="index" data-section="index">
+          <div class="section-head">
+            <div>
+              <h2>Research index</h2>
+              <p>Search everything from one place. Switch views to focus on papers, projects, or mirrors.</p>
+            </div>
+            <div class="hint">Use the index as your public landing page.</div>
+          </div>
+
+          <div class="controls">
+            <label class="search" aria-label="Search papers and projects">
+              <span>⌕</span>
+              <input id="search" type="search" placeholder="Search papers, repos, topics, or keywords…" />
+            </label>
+            <div class="filter-row">
+              <button class="chip active" data-view="all">All</button>
+              <button class="chip" data-view="papers">Papers</button>
+              <button class="chip" data-view="projects">Projects</button>
+              <button class="chip" data-view="mirrors">Mirrors</button>
+              <label class="toggle chip" style="padding-inline: 14px;">
+                <input id="showMirrors" type="checkbox" />
+                Show mirrors in the main search
+              </label>
+            </div>
+          </div>
+
+          <div class="index-meta">
+            <div class="result-count" id="totalShown">Loading…</div>
+            <div class="subtle">Papers include the full paper versions; projects list original repos by default.</div>
+          </div>
+
+          <div id="noResults" class="empty" style="display:none;">
+            No matches. Try a different keyword or switch the view back to All.
+          </div>
+        </section>
+
+        <section class="section" id="papers" data-section="papers">
+          <div class="section-head">
+            <div>
+              <h2>Research papers</h2>
+              <p>Direct access to the KVQuant manuscripts and source files.</p>
+            </div>
+          </div>
+          <div class="grid" id="papersGrid"></div>
+        </section>
+
+        <section class="section" id="projects" data-section="projects">
+          <div class="section-head">
+            <div>
+              <h2>Projects</h2>
+              <p>Original repositories from the research and systems side of the work.</p>
+            </div>
+          </div>
+          <div class="grid projects" id="projectsGrid"></div>
+        </section>
+
+        <section class="section" id="mirrors" data-section="mirrors">
+          <div class="section-head">
+            <div>
+              <h2>Mirrors & contributions</h2>
+              <p>Forked or upstream-contribution repos kept for reference. Hidden unless you choose to show them.</p>
+            </div>
+          </div>
+          <div class="grid mirrors" id="mirrorsGrid"></div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
+            <div>
+              <h2>What this site is for</h2>
+              <p>A single public hub you can hand to people when they ask what you build.</p>
+            </div>
+          </div>
+          <div class="mini-list">
+            <div class="mini-item">
+              <div>
+                <strong>For readers</strong>
+                <span>Jump straight to papers, project pages, and PDF downloads.</span>
+              </div>
+            </div>
+            <div class="mini-item">
+              <div>
+                <strong>For reviewers</strong>
+                <span>A clean public surface for arXiv, OpenReview, and future venue submissions.</span>
+              </div>
+            </div>
+            <div class="mini-item">
+              <div>
+                <strong>For you</strong>
+                <span>A living index that can grow as new papers and repos land.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="footer">
+          <div class="line"></div>
+          <div class="small-nav">
+            <a href="#top">Back to top</a>
+            <a href="https://github.com/AmSach" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="papers/kvquant-paper-ultradeep-v3.pdf" target="_blank" rel="noreferrer">Latest paper PDF</a>
+          </div>
+          <div>Built for a public research identity: papers first, projects next, no clutter.</div>
+        </footer>
+      </main>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
