@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A new lossless compression project that combines per-file and per-block codec selection, a compressed model store, and a public demo linked from the GitHub Pages research index." />
+    <meta name="theme-color" content="#07111f" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MiddleOut Lattice: Lossless Compression of LLM Artefacts with Codec-Aware Tensor Packing — Aman Sachan" />
+    <meta property="og:description" content="research draft · technical report + public demo" />
+    <meta property="og:image" content="../../og.svg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="MiddleOut Lattice: Lossless Compression of LLM Artefacts with Codec-Aware Tensor Packing — Aman Sachan" />
+    <meta name="twitter:description" content="research draft · technical report + public demo" />
+    <meta name="twitter:image" content="../../og.svg" />
+    <title>MiddleOut Lattice: Lossless Compression of LLM Artefacts with Codec-Aware Tensor Packing — Aman Sachan</title>
+    <link rel="icon" type="image/png" href="../../assets/icon.png" />
+    <link rel="stylesheet" href="../../styles.css" />
+  </head>
+  <body data-page-kind="paper">
+    
+  <div class="shell detail-shell">
+    
+<header class="topbar">
+  <a class="brand" href="../../index.html">
+    <img src="../../assets/pegasus.svg" alt="Pegasus logo" />
+    <div class="brand-text">
+      <strong>Aman Sachan</strong>
+      <span>papers • projects • research index</span>
+    </div>
+  </a>
+  <nav class="nav">
+    <a  href="../../index.html">Home</a>
+    <a data-active="true" href="../../papers/">Papers</a>
+    <a  href="../../projects/">Projects</a>
+    <a href="https://github.com/AmSach" target="_blank" rel="noreferrer">GitHub</a>
+  </nav>
+</header>
+    <main class="detail-main">
+      <section class="detail-hero panel">
+        <div class="detail-hero-copy">
+          <span class="eyebrow">Research paper</span>
+          <h1>MiddleOut Lattice: Lossless Compression of LLM Artefacts with Codec-Aware Tensor Packing</h1>
+          <p>A new lossless compression project that combines per-file and per-block codec selection, a compressed model store, and a public demo linked from the GitHub Pages research index.</p>
+          <div class="hero-actions">
+            <a class="btn primary" href="../../papers/middleout-lattice-paper.pdf" target="_blank" rel="noreferrer">Open PDF</a>
+            <a class="btn ghost" href="../../Deliverables/middleout-lattice/middleout-lattice-paper.tex" target="_blank" rel="noreferrer">Source file</a>
+            <a class="btn ghost" href="../../papers/">All papers</a>
+            <a class="btn ghost" href="../../index.html">Home</a>
+          </div>
+        </div>
+        <aside class="hero-aside detail-aside">
+          <div class="stat-grid">
+            <div class="stat"><strong>research draft</strong><span>Version</span></div><div class="stat"><strong>technical report + public demo</strong><span>Status</span></div><div class="stat"><strong>3</strong><span>Tags</span></div><div class="stat"><strong>Aman Sachan</strong><span>Author</span></div>
+          </div>
+          <div class="feature-stack">
+            <div class="feature"><span class="dot"></span><div><strong>lossless compression</strong><span>Topic label for the paper index.</span></div></div><div class="feature"><span class="dot"></span><div><strong>LLM artefacts</strong><span>Topic label for the paper index.</span></div></div><div class="feature"><span class="dot"></span><div><strong>codec-aware packing</strong><span>Topic label for the paper index.</span></div></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="detail-grid">
+        <article class="section panel detail-panel">
+          <div class="section-head"><div><h2>Technical synopsis</h2><p>The paper is built around a precise cache-compression story with explicit maths and implementation detail.</p></div></div>
+          <div class="prose">
+            <p>A new lossless compression project that combines per-file and per-block codec selection, a compressed model store, and a public demo linked from the GitHub Pages research index.</p>
+            <ul class="detail-list">
+              <li>Adaptive mixed-precision cache compression</li><li>Recency-aware bit allocation</li><li>Sink-aware reservation for stable anchors</li><li>Head/layer coupling for finer precision control</li><li>Explicit metadata for invertibility and auditing</li><li>Forward-pass wrapping for drop-in use</li>
+            </ul>
+          </div>
+        </article>
+
+        <aside class="section panel detail-panel">
+          <div class="section-head"><div><h2>Quick facts</h2><p>Everything a reviewer or reader needs at a glance.</p></div></div>
+          <div class="mini-list">
+            <div class="mini-item"><div><strong>File</strong><span>papers/middleout-lattice-paper.pdf</span></div></div><div class="mini-item"><div><strong>Source</strong><span>Deliverables/middleout-lattice/middleout-lattice-paper.tex</span></div></div><div class="mini-item"><div><strong>Format</strong><span>PDF + LaTeX source</span></div></div><div class="mini-item"><div><strong>Project</strong><span>KVQuant</span></div></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section panel detail-panel">
+        <div class="section-head"><div><h2>Math + algorithm focus</h2><p>Why the paper is not just a narrative, but a system design with structure.</p></div></div>
+        <div class="prose columns">
+          <div>
+            <h3>Core equation</h3>
+            <p>The cache footprint grows as <code>M<sub>KV</sub> = 2 · B · L · H · T · D<sub>h</sub> · b</code>. The paper uses this to motivate a precision allocator rather than naive uniform compression.</p>
+          </div>
+          <div>
+            <h3>Allocation logic</h3>
+            <p>The relaxed allocator gives more precision to more important tokens and smaller budgets to tokens that are older, less sensitive, or less structurally important.</p>
+          </div>
+          <div>
+            <h3>Implementation contract</h3>
+            <p>The runtime wrapper decompresses incoming cache state, runs the model, then compresses the returned cache with metadata preserved for exact reconstruction.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section panel detail-panel">
+        <div class="section-head"><div><h2>Preview</h2><p>Open the PDF inline without leaving the page.</p></div></div>
+        <iframe class="pdf-frame" src="../../papers/middleout-lattice-paper.pdf" title="MiddleOut Lattice: Lossless Compression of LLM Artefacts with Codec-Aware Tensor Packing PDF"></iframe>
+      </section>
+
+      <section class="section panel detail-panel">
+        <div class="section-head"><div><h2>Related papers</h2><p>Alternate manuscript versions of the same project.</p></div></div>
+        <div class="grid related-grid">
+          
+            <article class="card related-card">
+              <div class="badges">
+                <span class="badge featured">Paper</span>
+                <span class="badge ">v3 — 32-page manuscript</span>
+              </div>
+              <h3>v3 — 32-page manuscript</h3>
+              <p class="desc">submission-ready preprint</p>
+              <div class="card-actions">
+                <a class="primary" href="../../papers/kvquant-paper-ultradeep-v3/">Open page</a>
+                <a href="../../papers/kvquant-paper-ultradeep-v3.pdf" target="_blank" rel="noreferrer">PDF</a>
+              </div>
+            </article>
+          
+            <article class="card related-card">
+              <div class="badges">
+                <span class="badge featured">Paper</span>
+                <span class="badge ">v2 — extended draft</span>
+              </div>
+              <h3>v2 — extended draft</h3>
+              <p class="desc">research manuscript</p>
+              <div class="card-actions">
+                <a class="primary" href="../../papers/kvquant-paper-ultradeep-v2/">Open page</a>
+                <a href="../../papers/kvquant-paper-ultradeep-v2.pdf" target="_blank" rel="noreferrer">PDF</a>
+              </div>
+            </article>
+          
+            <article class="card related-card">
+              <div class="badges">
+                <span class="badge featured">Paper</span>
+                <span class="badge ">deep draft</span>
+              </div>
+              <h3>deep draft</h3>
+              <p class="desc">technical report</p>
+              <div class="card-actions">
+                <a class="primary" href="../../papers/kvquant-paper-ultradeep/">Open page</a>
+                <a href="../../papers/kvquant-paper-ultradeep.pdf" target="_blank" rel="noreferrer">PDF</a>
+              </div>
+            </article>
+          
+        </div>
+      </section>
+    </main>
+  </div>
+  </body>
+</html>

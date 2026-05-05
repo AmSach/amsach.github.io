@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
+import { fileURLToPath } from 'node:url';
 
 const ROOT = process.cwd();
 const SITE = ROOT;
@@ -10,7 +11,8 @@ const OUT_PROJECTS = path.join(SITE, 'projects');
 const ASSETS = path.join(SITE, 'assets');
 
 function readSiteData() {
-  const code = fs.readFileSync(DATA_JS, 'utf8');
+  const dataPath = fs.existsSync(DATA_JS) ? DATA_JS : path.join(path.dirname(fileURLToPath(import.meta.url)), 'data.js');
+  const code = fs.readFileSync(dataPath, 'utf8');
   const sandbox = { window: {} };
   vm.createContext(sandbox);
   vm.runInContext(code, sandbox, { timeout: 1000 });

@@ -1,10 +1,24 @@
 window.SITE_DATA = {
   "stats": {
-    "papers": 4,
-    "projects": 109,
+    "papers": 5,
+    "projects": 110,
     "mirrors": 72
   },
   "papers": [
+    {
+      "title": "MiddleOut Lattice: Lossless Compression of LLM Artefacts with Codec-Aware Tensor Packing",
+      "version": "research draft",
+      "status": "technical report + public demo",
+      "summary": "A new lossless compression project that combines per-file and per-block codec selection, a compressed model store, and a public demo linked from the GitHub Pages research index.",
+      "pdf": "papers/middleout-lattice-paper.pdf",
+      "tex": "Deliverables/middleout-lattice/middleout-lattice-paper.tex",
+      "tags": [
+        "lossless compression",
+        "LLM artefacts",
+        "codec-aware packing"
+      ],
+      "primary": false
+    },
     {
       "title": "KVQuant: Adaptive Long-Context KV-Cache Compression for Memory-Bounded LLM Inference",
       "version": "v3 — 32-page manuscript",
@@ -62,7 +76,18 @@ window.SITE_DATA = {
     }
   ],
   "projects": [
+
     {
+      "name": "middleout-lattice",
+      "description": "Lossless compression for model files and tensor archives with per-file and per-block codec selection.",
+      "url": "https://github.com/AmSach/entropic-pegasus",
+      "repoUrl": "https://github.com/AmSach/entropic-pegasus",
+      "language": "Python",
+      "stars": 0,
+      "featured": true,
+      "fork": false,
+      "upstream": ""
+    },    {
       "name": "bitforge",
       "description": "🔥 Shrink any LLM to fit in your pocket - Auto-compress language models for microcontrollers",
       "url": "https://github.com/AmSach/bitforge",
