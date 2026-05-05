@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Live demo for MiddleOut Lattice: exact archive compression with per-file and per-block codec selection." />
+    <meta name="theme-color" content="#07111f" />
+    <title>MiddleOut Lattice Demo</title>
+    <link rel="icon" type="image/png" href="../../../assets/icon.png" />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <style>
+      .demo-grid { display:grid; grid-template-columns: 1.1fr .9fr; gap: 16px; }
+      .demo-step { border:1px solid var(--line); background:rgba(255,255,255,.03); border-radius:18px; padding:16px; }
+      .demo-step h3 { margin:0 0 8px; }
+      .demo-step p, .demo-step li, .demo-step pre { color: var(--muted); }
+      .demo-step pre { overflow:auto; padding:12px; border-radius:14px; background:rgba(0,0,0,.18); border:1px solid var(--line); }
+      .bar { height: 16px; border-radius: 999px; background: rgba(255,255,255,.06); overflow:hidden; }
+      .bar > span { display:block; height:100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
+      .pill { display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:rgba(120,240,193,.1); border:1px solid rgba(120,240,193,.18); color:#d7ffee; margin-right:8px; }
+      .small { font-size: 13px; color: var(--muted); }
+      @media (max-width: 900px) { .demo-grid { grid-template-columns: 1fr; } }
+    </style>
+  </head>
+  <body>
+    <div class="shell detail-shell">
+      <header class="topbar">
+        <a class="brand" href="../../../index.html">
+          <img src="../../../assets/pegasus.svg" alt="Pegasus logo" />
+          <div class="brand-text"><strong>Aman Sachan</strong><span>MiddleOut Lattice demo</span></div>
+        </a>
+        <nav class="nav">
+          <a href="../../../index.html">Home</a>
+          <a href="../../">Project</a>
+          <a href="../../../papers/middleout-lattice-paper/">Paper</a>
+          <a href="../../../papers/middleout-lattice-paper.pdf" target="_blank" rel="noreferrer">PDF</a>
+        </nav>
+      </header>
+
+      <main class="detail-main">
+        <section class="detail-hero panel">
+          <div class="detail-hero-copy">
+            <span class="eyebrow">Live demo</span>
+            <h1>Compressed model store, exact round-trip</h1>
+            <p>This demo shows the working flow: store files in compressed form, skip blocks that should stay raw, and reconstruct the original bytes exactly.</p>
+            <div class="hero-actions">
+              <span class="pill">Lossless</span>
+              <span class="pill">Per-file codec choice</span>
+              <span class="pill">Per-block fallback</span>
+            </div>
+          </div>
+          <aside class="hero-aside detail-aside">
+            <div class="stat-grid">
+              <div class="stat"><strong>4</strong><span>tests passing in the engine</span></div>
+              <div class="stat"><strong>Qwen</strong><span>template benchmark data included</span></div>
+              <div class="stat"><strong>raw-if-worse</strong><span>never inflates a file on purpose</span></div>
+              <div class="stat"><strong>exact</strong><span>bit-for-bit decode path</span></div>
+            </div>
+          </aside>
+        </section>
+
+        <section class="demo-grid">
+          <article class="section panel demo-step">
+            <h3>1. File selection</h3>
+            <p>The engine reads a model repository as files. For the Qwen template, that includes JSON metadata, tokenizer files, and vocab assets.</p>
+            <pre>config.json
+generation_config.json
+merges.txt
+tokenizer.json
+tokenizer_config.json
+vocab.json</pre>
+          </article>
+
+          <article class="section panel demo-step">
+            <h3>2. Codec choice</h3>
+            <p>Each file or block gets candidate encodings. The best one wins only if it is actually smaller; otherwise the file stays raw.</p>
+            <div class="small">Example: tokenizer_config.json</div>
+            <div class="bar"><span style="width: 100%"></span></div>
+            <div class="small" style="margin-top:8px;">Best ratio in template data: 5.4758x</div>
+          </article>
+
+          <article class="section panel demo-step">
+            <h3>3. Manifest and metadata</h3>
+            <p>The store records the chosen codec, raw size, stored size, and SHA-256 for each block. That is what makes exact reconstruction boring and reliable.</p>
+            <pre>{
+  "mode": "archive",
+  "codec": "zlib",
+  "sha256": "...",
+  "stored_bytes": 1320
+}</pre>
+          </article>
+
+          <article class="section panel demo-step">
+            <h3>4. Rebuild and verify</h3>
+            <p>During load, the archive is decoded back to the original file bytes and checked against the stored checksum. If anything changes, it fails loudly.</p>
+            <pre>compressed -> decode -> hash check -> original bytes</pre>
+          </article>
+        </section>
+
+        <section class="section panel">
+          <div class="section-head">
+            <div>
+              <h2>Benchmark snapshot</h2>
+              <p>The project page carries the generated benchmark artefacts and chart.</p>
+            </div>
+          </div>
+          <div class="grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="card">
+              <div class="badges"><span class="badge featured">Data</span><span class="badge">Qwen template</span></div>
+              <h3>Results table</h3>
+              <p class="desc">File-level codec comparison with exact round-trip checks.</p>
+              <div class="card-actions"><a class="primary" href="benchmark.csv" target="_blank" rel="noreferrer">Open CSV</a><a href="benchmark.json" target="_blank" rel="noreferrer">Open JSON</a></div>
+            </div>
+            <div class="card">
+              <div class="badges"><span class="badge featured">Chart</span><span class="badge">PNG + SVG</span></div>
+              <h3>Visual comparison</h3>
+              <p class="desc">Simple bars for ratios across the model files tested.</p>
+              <div class="card-actions"><a class="primary" href="comparison.png" target="_blank" rel="noreferrer">Open PNG</a><a href="comparison.svg" target="_blank" rel="noreferrer">Open SVG</a></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section panel">
+          <div class="section-head">
+            <div>
+              <h2>Paper links</h2>
+              <p>Connect the demo to the manuscript and the landing page.</p>
+            </div>
+          </div>
+          <div class="mini-list">
+            <div class="mini-item"><div><strong>Paper page</strong><span><a href="../../../papers/middleout-lattice-paper/">Open the manuscript page</a></span></div></div>
+            <div class="mini-item"><div><strong>PDF</strong><span><a href="../../../papers/middleout-lattice-paper.pdf" target="_blank" rel="noreferrer">Download the PDF</a></span></div></div>
+            <div class="mini-item"><div><strong>Landing page</strong><span><a href="../../../index.html">Back to the research index</a></span></div></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
