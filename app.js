@@ -1,9 +1,8 @@
-
 const data = window.SITE_DATA;
 const state = {
   view: 'all',
   query: '',
-  showMirrors: false,
+  showMirrors: true,
 };
 
 const els = {
